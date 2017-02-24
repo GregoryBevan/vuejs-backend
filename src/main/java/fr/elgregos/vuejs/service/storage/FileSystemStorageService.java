@@ -5,6 +5,7 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ public class FileSystemStorageService implements StorageService {
 
     @Autowired
     public FileSystemStorageService() {
-        this.rootLocation = Paths.get("D:/Temp");
+        this.rootLocation = Paths.get("C:/dev/tmp");
     }
 
     @Override
@@ -29,7 +30,7 @@ public class FileSystemStorageService implements StorageService {
             if (file.isEmpty()) {
                 throw new RuntimeException("Failed to store empty file " + file.getOriginalFilename());
             }
-            Files.copy(file.getInputStream(), this.rootLocation.resolve(file.getOriginalFilename()));
+            Files.copy(file.getInputStream(), this.rootLocation.resolve(file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
             throw new RuntimeException("Failed to store file " + file.getOriginalFilename(), e);
         }
